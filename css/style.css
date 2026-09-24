@@ -2,25 +2,114 @@
    CS344 Web Engineering - Lab 3
    External stylesheet for the Personal Portfolio
    Author: Aryan Zia (505899, Section A)
+
+   Design system:
+   - One set of CSS custom properties (tokens) drives the theme.
+   - Light theme by default; dark theme follows the OS setting and
+     can be overridden with the header toggle (pure CSS, no JS).
+   - Layouts use the CSS float and clear properties (lab requirement).
    ========================================================= */
 
-/* ---------- Global reset and base styles ---------- */
+/* ---------- Theme tokens: LIGHT (default) ---------- */
+:root {
+  --bg: #f6f7fb;
+  --surface: #ffffff;
+  --surface-2: #eef1f7;
+  --text: #0f172a;
+  --muted: #64748b;
+  --border: #e4e8f0;
+  --accent: #6366f1;
+  --accent-2: #8b5cf6;
+  --accent-soft: rgba(99, 102, 241, 0.12);
+  --header-bg: rgba(255, 255, 255, 0.78);
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 8px 20px rgba(15, 23, 42, 0.09);
+  --shadow-lg: 0 18px 44px rgba(15, 23, 42, 0.14);
+
+  --radius: 18px;
+  --radius-sm: 12px;
+  --pill: 999px;
+  --maxw: 1000px;
+  --trans: 0.25s ease;
+}
+
+/* ---------- Theme tokens: DARK (follows OS setting) ---------- */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0b1220;
+    --surface: #111a2e;
+    --surface-2: #0e1729;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --border: #1e293b;
+    --accent: #818cf8;
+    --accent-2: #a78bfa;
+    --accent-soft: rgba(129, 140, 248, 0.16);
+    --header-bg: rgba(15, 22, 40, 0.78);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 8px 22px rgba(0, 0, 0, 0.45);
+    --shadow-lg: 0 18px 44px rgba(0, 0, 0, 0.55);
+  }
+  /* Manual override: toggle ON inverts dark OS theme back to light */
+  :root:has(#theme-toggle:checked) {
+    --bg: #f6f7fb;
+    --surface: #ffffff;
+    --surface-2: #eef1f7;
+    --text: #0f172a;
+    --muted: #64748b;
+    --border: #e4e8f0;
+    --accent: #6366f1;
+    --accent-2: #8b5cf6;
+    --accent-soft: rgba(99, 102, 241, 0.12);
+    --header-bg: rgba(255, 255, 255, 0.78);
+    --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+    --shadow-md: 0 8px 20px rgba(15, 23, 42, 0.09);
+    --shadow-lg: 0 18px 44px rgba(15, 23, 42, 0.14);
+  }
+}
+
+/* Manual override: toggle ON in a light OS theme switches to dark */
+@media (prefers-color-scheme: light) {
+  :root:has(#theme-toggle:checked) {
+    --bg: #0b1220;
+    --surface: #111a2e;
+    --surface-2: #0e1729;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --border: #1e293b;
+    --accent: #818cf8;
+    --accent-2: #a78bfa;
+    --accent-soft: rgba(129, 140, 248, 0.16);
+    --header-bg: rgba(15, 22, 40, 0.78);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 8px 22px rgba(0, 0, 0, 0.45);
+    --shadow-lg: 0 18px 44px rgba(0, 0, 0, 0.55);
+  }
+}
+
+/* ---------- Global reset and base ---------- */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  font-family: "Segoe UI", Arial, sans-serif;
-  background: #eef2f7;
-  color: #22303f;
-  line-height: 1.6;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  transition: background var(--trans), color var(--trans);
+  -webkit-font-smoothing: antialiased;
 }
 
 /* ---------- Clearfix helper ----------
-   Floated children are removed from the normal flow, so the
-   parent can collapse. This clears the floats properly. */
+   Floated children are removed from normal flow, so the parent can
+   collapse. This clears the floats and fixes the layout. */
 .clearfix {
   overflow: hidden;
 }
@@ -30,32 +119,123 @@ body {
   clear: both;
 }
 
-/* ---------- Header ---------- */
-header {
-  background: #16324f;
-  color: #fff;
-  text-align: center;
-  padding: 30px 15px;
-  border-bottom: 5px solid #2e9cca;
+/* ---------- Animations (subtle) ---------- */
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-header h1 {
-  font-size: 32px;
-  letter-spacing: 1px;
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }
-header p {
-  color: #a9c7dd;
-  font-size: 15px;
-  margin-top: 6px;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-/* ---------- Navigation menu ----------
-   The list is centred as a whole and each list item is floated
-   left so the links sit side by side (horizontal menu). */
+/* ---------- Header (hero) ---------- */
+header {
+  position: relative;
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 55%, #9333ea 100%);
+  color: #fff;
+  text-align: center;
+  padding: 56px 18px 44px;
+  animation: fadeIn 0.5s ease both;
+}
+header h1 {
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+header p {
+  margin-top: 8px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 15px;
+  letter-spacing: 0.3px;
+}
+
+/* ---------- Theme toggle (pure CSS switch) ---------- */
+.theme-toggle {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.theme-switch {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 58px;
+  height: 30px;
+  border-radius: var(--pill);
+  background: rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: background var(--trans);
+}
+.theme-switch::before,
+.theme-switch::after {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  line-height: 1;
+}
+.theme-switch::before {
+  content: "\2600";       /* sun */
+  left: 7px;
+}
+.theme-switch::after {
+  content: "\263E";       /* moon */
+  right: 7px;
+}
+.theme-switch .knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.28);
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+#theme-toggle:checked + .theme-switch .knob {
+  transform: translateX(28px);
+}
+#theme-toggle:focus-visible + .theme-switch {
+  outline: 3px solid rgba(255, 255, 255, 0.9);
+  outline-offset: 3px;
+}
+
+/* ---------- Navigation menu (sticky, horizontal via float) ---------- */
 nav {
-  background: #2e9cca;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--header-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
   text-align: center;
   padding: 10px;
   overflow: hidden;          /* clears the floated list items */
+  transition: background var(--trans), border-color var(--trans);
 }
 nav ul {
   list-style: none;
@@ -66,75 +246,126 @@ nav li {
 }
 nav a {
   display: block;
-  color: #fff;
+  color: var(--text);
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 600;
+  font-size: 15px;
   padding: 8px 16px;
   margin: 3px;
-  border-radius: 4px;
+  border-radius: var(--pill);
+  transition: background var(--trans), color var(--trans), transform var(--trans);
 }
 nav a:hover {
-  background: #16324f;
+  background: var(--accent-soft);
+  color: var(--accent);
+  transform: translateY(-1px);
 }
 nav a.active {
-  background: #16324f;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff;
+  box-shadow: var(--shadow-sm);
 }
 
 /* ---------- Page wrapper ---------- */
 main {
-  max-width: 950px;
-  margin: 25px auto;
-  padding: 0 15px;
+  max-width: var(--maxw);
+  margin: 30px auto;
+  padding: 0 16px;
   overflow: hidden;          /* clears any floated content inside */
 }
 
 /* ---------- Content cards ---------- */
 .card {
-  background: #fff;
-  padding: 25px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  margin-bottom: 22px;
+  box-shadow: var(--shadow-sm);
+  animation: riseIn 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  transition: transform var(--trans), box-shadow var(--trans),
+              border-color var(--trans), background var(--trans);
 }
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent);
+}
+main > .card:nth-child(1) { animation-delay: 0.05s; }
+main > .card:nth-child(2) { animation-delay: 0.14s; }
+main > .card:nth-child(3) { animation-delay: 0.23s; }
+main > .card:nth-child(4) { animation-delay: 0.32s; }
 
 /* ---------- Typography ---------- */
 h2 {
-  color: #16324f;
-  border-left: 6px solid #2e9cca;
-  padding-left: 10px;
-  margin-bottom: 15px;
+  position: relative;
+  color: var(--text);
+  font-size: 22px;
+  font-weight: 750;
+  letter-spacing: -0.3px;
+  padding-left: 16px;
+  margin-bottom: 16px;
+}
+h2::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.12em;
+  bottom: 0.12em;
+  width: 5px;
+  border-radius: var(--pill);
+  background: linear-gradient(var(--accent), var(--accent-2));
 }
 h3 {
-  color: #2e9cca;
-  margin: 20px 0 8px;
+  color: var(--accent);
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin: 24px 0 10px;
 }
 p {
   margin-bottom: 10px;
 }
+code {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.9em;
+  background: var(--surface-2);
+  color: var(--accent);
+  padding: 1px 6px;
+  border-radius: 6px;
+}
 ul {
-  margin-left: 25px;
+  margin-left: 22px;
   margin-bottom: 10px;
 }
 li {
   margin-bottom: 6px;
 }
 
-/* ---------- Buttons / links styled as buttons ---------- */
+/* ---------- Buttons ---------- */
 .btn {
   display: inline-block;
-  background: #2e9cca;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
   color: #fff;
   text-decoration: none;
-  padding: 10px 22px;
-  border-radius: 5px;
-  font-weight: bold;
+  padding: 11px 24px;
+  border-radius: var(--pill);
+  font-weight: 650;
+  font-size: 15px;
   margin: 8px 8px 0 0;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--trans), box-shadow var(--trans), filter var(--trans);
 }
 .btn:hover {
-  background: #16324f;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  filter: brightness(1.06);
+}
+.btn:active {
+  transform: translateY(0) scale(0.98);
 }
 
-/* ---------- Home page intro (float layout) ----------
+/* ---------- Home intro (float layout) ----------
    The profile picture floats left and the text wraps beside it.
    The wrapper clears the float so following content starts below. */
 .intro {
@@ -142,12 +373,19 @@ li {
 }
 .intro img {
   float: left;               /* image floats beside the text */
-  width: 180px;
-  height: 180px;
+  width: 170px;
+  height: 170px;
   object-fit: cover;
   border-radius: 50%;
-  border: 5px solid #2e9cca;
-  margin: 0 25px 15px 0;
+  padding: 5px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  box-shadow: var(--shadow-md);
+  margin: 0 28px 18px 0;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+.intro img:hover {
+  transform: scale(1.04) rotate(-1.5deg);
+  box-shadow: var(--shadow-lg);
 }
 .intro-text {
   overflow: hidden;
@@ -158,18 +396,21 @@ table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
 }
 th, td {
-  border: 1px solid #cfdae5;
-  padding: 10px;
+  border: 1px solid var(--border);
+  padding: 12px 14px;
   text-align: left;
 }
 th {
-  background: #16324f;
-  color: #fff;
+  background: var(--surface-2);
+  color: var(--text);
+  font-weight: 700;
 }
 tr:nth-child(even) {
-  background: #f4f8fb;
+  background: var(--accent-soft);
 }
 
 /* ---------- Image gallery (float layout) ----------
@@ -182,23 +423,39 @@ tr:nth-child(even) {
   float: left;               /* arrange gallery using float */
   width: calc(33.333% - 16px);
   margin: 8px;
-  background: #fff;
-  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
   padding: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
   text-align: center;
+  transition: transform var(--trans), box-shadow var(--trans), border-color var(--trans);
+}
+.gallery figure:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent);
 }
 .gallery img {
   width: 100%;
   height: 170px;
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: 8px;
   display: block;
+  transition: transform 0.45s ease;
+}
+.gallery figure:hover img {
+  transform: scale(1.07);
 }
 .gallery figcaption {
   font-size: 14px;
-  color: #5a6b7b;
-  margin-top: 8px;
+  color: var(--muted);
+  margin-top: 10px;
+  transition: color var(--trans);
+}
+.gallery figure:hover figcaption {
+  color: var(--accent);
 }
 
 /* ---------- Contact form ---------- */
@@ -207,30 +464,48 @@ form {
 }
 label {
   display: block;
-  font-weight: bold;
-  margin: 12px 0 5px;
+  font-weight: 650;
+  margin: 14px 0 6px;
 }
 input, textarea {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #cfdae5;
-  border-radius: 5px;
+  padding: 11px 13px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
   font-family: inherit;
   font-size: 15px;
+  transition: border-color var(--trans), box-shadow var(--trans), background var(--trans);
+}
+input::placeholder, textarea::placeholder {
+  color: var(--muted);
+}
+input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 button {
-  background: #2e9cca;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
   color: #fff;
   border: none;
-  padding: 12px 26px;
-  border-radius: 5px;
+  padding: 12px 28px;
+  border-radius: var(--pill);
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 650;
   cursor: pointer;
-  margin-top: 15px;
+  margin-top: 16px;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--trans), box-shadow var(--trans), filter var(--trans);
 }
 button:hover {
-  background: #16324f;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  filter: brightness(1.06);
+}
+button:active {
+  transform: translateY(0) scale(0.98);
 }
 
 /* ---------- Skill bars ---------- */
@@ -238,28 +513,79 @@ button:hover {
   margin-bottom: 18px;
 }
 .skill label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
+  margin: 0 0 6px;
 }
 .bar {
-  background: #dbe4ec;
-  border-radius: 20px;
-  height: 16px;
+  background: var(--surface-2);
+  border-radius: var(--pill);
+  height: 10px;
   overflow: hidden;
 }
 .bar div {
   height: 100%;
-  background: linear-gradient(90deg, #2e9cca, #16324f);
-  border-radius: 20px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  border-radius: var(--pill);
+  transform-origin: left;
+  animation: grow 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 
 /* ---------- Footer ---------- */
 footer {
   clear: both;               /* sits below any floated content */
-  background: #16324f;
-  color: #a9c7dd;
+  margin-top: 10px;
+  background: var(--surface-2);
+  border-top: 1px solid var(--border);
+  color: var(--muted);
   text-align: center;
-  padding: 15px;
+  padding: 20px;
   font-size: 14px;
+  transition: background var(--trans), border-color var(--trans);
+}
+
+/* ---------- Accessibility: focus outlines ---------- */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 760px) {
+  .gallery figure {
+    width: calc(50% - 16px);
+  }
+  .intro img {
+    float: none;
+    display: block;
+    margin: 0 auto 18px;
+  }
+  nav a {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+  header {
+    padding: 48px 16px 38px;
+  }
+}
+@media (max-width: 520px) {
+  .gallery figure {
+    width: calc(100% - 16px);
+  }
+  .card {
+    padding: 20px;
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }

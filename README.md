@@ -55,12 +55,21 @@ portfolio/
 
 ## Features
 
-- Shared header, navigation menu and footer on every page.
+- Shared sticky header, navigation menu and footer on every page.
 - One external `css/style.css` linked by all pages (no inline/internal CSS).
 - Horizontal navigation menu built with floated list items.
 - Home page profile image floated left with text wrapping beside it.
 - Image gallery built with floated figures and a clearfix.
-- Consistent colour scheme (`#16324f` and `#2e9cca`), fonts, borders and spacing.
+- **Modern design system** driven by CSS custom properties (tokens) for
+  colours, shadows, spacing and radius.
+- **Light and dark theme** with a header toggle. It follows the operating
+  system preference by default and can be overridden manually - implemented
+  entirely in CSS (`prefers-color-scheme` + `:has()`), with no JavaScript.
+- **Subtle animations**: fade-up on page load, hover lifts on cards and
+  buttons, image zoom in the gallery, and animated skill bars. All motion is
+  disabled automatically under `prefers-reduced-motion`.
+- Accessible focus outlines and a responsive, float-based layout.
+- Slate + indigo colour scheme that adapts to the active theme.
 - No JavaScript and no CSS frameworks (as required by the lab).
 
 ## Links
