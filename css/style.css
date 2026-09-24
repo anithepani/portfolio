@@ -1,0 +1,265 @@
+/* =========================================================
+   CS344 Web Engineering - Lab 3
+   External stylesheet for the Personal Portfolio
+   Author: Aryan Zia (505899, Section A)
+   ========================================================= */
+
+/* ---------- Global reset and base styles ---------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #eef2f7;
+  color: #22303f;
+  line-height: 1.6;
+}
+
+/* ---------- Clearfix helper ----------
+   Floated children are removed from the normal flow, so the
+   parent can collapse. This clears the floats properly. */
+.clearfix {
+  overflow: hidden;
+}
+.clearfix::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+/* ---------- Header ---------- */
+header {
+  background: #16324f;
+  color: #fff;
+  text-align: center;
+  padding: 30px 15px;
+  border-bottom: 5px solid #2e9cca;
+}
+header h1 {
+  font-size: 32px;
+  letter-spacing: 1px;
+}
+header p {
+  color: #a9c7dd;
+  font-size: 15px;
+  margin-top: 6px;
+}
+
+/* ---------- Navigation menu ----------
+   The list is centred as a whole and each list item is floated
+   left so the links sit side by side (horizontal menu). */
+nav {
+  background: #2e9cca;
+  text-align: center;
+  padding: 10px;
+  overflow: hidden;          /* clears the floated list items */
+}
+nav ul {
+  list-style: none;
+  display: inline-block;
+}
+nav li {
+  float: left;               /* horizontal alignment using float */
+}
+nav a {
+  display: block;
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 8px 16px;
+  margin: 3px;
+  border-radius: 4px;
+}
+nav a:hover {
+  background: #16324f;
+}
+nav a.active {
+  background: #16324f;
+}
+
+/* ---------- Page wrapper ---------- */
+main {
+  max-width: 950px;
+  margin: 25px auto;
+  padding: 0 15px;
+  overflow: hidden;          /* clears any floated content inside */
+}
+
+/* ---------- Content cards ---------- */
+.card {
+  background: #fff;
+  padding: 25px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* ---------- Typography ---------- */
+h2 {
+  color: #16324f;
+  border-left: 6px solid #2e9cca;
+  padding-left: 10px;
+  margin-bottom: 15px;
+}
+h3 {
+  color: #2e9cca;
+  margin: 20px 0 8px;
+}
+p {
+  margin-bottom: 10px;
+}
+ul {
+  margin-left: 25px;
+  margin-bottom: 10px;
+}
+li {
+  margin-bottom: 6px;
+}
+
+/* ---------- Buttons / links styled as buttons ---------- */
+.btn {
+  display: inline-block;
+  background: #2e9cca;
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 22px;
+  border-radius: 5px;
+  font-weight: bold;
+  margin: 8px 8px 0 0;
+}
+.btn:hover {
+  background: #16324f;
+}
+
+/* ---------- Home page intro (float layout) ----------
+   The profile picture floats left and the text wraps beside it.
+   The wrapper clears the float so following content starts below. */
+.intro {
+  overflow: hidden;          /* clearfix for the floated image */
+}
+.intro img {
+  float: left;               /* image floats beside the text */
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 5px solid #2e9cca;
+  margin: 0 25px 15px 0;
+}
+.intro-text {
+  overflow: hidden;
+}
+
+/* ---------- Tables ---------- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+th, td {
+  border: 1px solid #cfdae5;
+  padding: 10px;
+  text-align: left;
+}
+th {
+  background: #16324f;
+  color: #fff;
+}
+tr:nth-child(even) {
+  background: #f4f8fb;
+}
+
+/* ---------- Image gallery (float layout) ----------
+   Each figure floats left to form a 3-column grid. The gallery
+   container clears the floats so the footer is not overlapped. */
+.gallery {
+  overflow: hidden;          /* clears floated figures */
+}
+.gallery figure {
+  float: left;               /* arrange gallery using float */
+  width: calc(33.333% - 16px);
+  margin: 8px;
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+.gallery img {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
+}
+.gallery figcaption {
+  font-size: 14px;
+  color: #5a6b7b;
+  margin-top: 8px;
+}
+
+/* ---------- Contact form ---------- */
+form {
+  max-width: 520px;
+}
+label {
+  display: block;
+  font-weight: bold;
+  margin: 12px 0 5px;
+}
+input, textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #cfdae5;
+  border-radius: 5px;
+  font-family: inherit;
+  font-size: 15px;
+}
+button {
+  background: #2e9cca;
+  color: #fff;
+  border: none;
+  padding: 12px 26px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 15px;
+}
+button:hover {
+  background: #16324f;
+}
+
+/* ---------- Skill bars ---------- */
+.skill {
+  margin-bottom: 18px;
+}
+.skill label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.bar {
+  background: #dbe4ec;
+  border-radius: 20px;
+  height: 16px;
+  overflow: hidden;
+}
+.bar div {
+  height: 100%;
+  background: linear-gradient(90deg, #2e9cca, #16324f);
+  border-radius: 20px;
+}
+
+/* ---------- Footer ---------- */
+footer {
+  clear: both;               /* sits below any floated content */
+  background: #16324f;
+  color: #a9c7dd;
+  text-align: center;
+  padding: 15px;
+  font-size: 14px;
+}

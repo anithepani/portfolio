@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home | Aryan Zia</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <h1>Aryan Zia</h1>
+  <p>BE Software Engineering &bull; Reg. No: 505899 &bull; Section: A</p>
+</header>
+
+<!-- navigation menu: links aligned horizontally using float -->
+<nav>
+  <ul>
+    <li><a class="active" href="index.html">Home</a></li>
+    <li><a href="hobbies.html">Hobbies</a></li>
+    <li><a href="skills.html">Personal Skills</a></li>
+    <li><a href="gallery.html">Image Gallery</a></li>
+    <li><a href="contact.html">Contact Me</a></li>
+  </ul>
+</nav>
+
+<main>
+
+  <!-- image floats left and the text sits beside it -->
+  <div class="card clearfix">
+    <div class="intro">
+      <img src="images/profile.jpg" alt="Aryan Zia profile picture">
+      <div class="intro-text">
+        <h2>Welcome to My Portfolio</h2>
+        <p>Hello! My name is <strong>Aryan Zia</strong> and I am a student of the
+        <strong>School of Electrical Engineering and Computer Sciences (SEECS)</strong>.
+        This website is my Lab 3 submission for <strong>CS344: Web Engineering (Fall 2026)</strong>.</p>
+        <p>For this lab the whole design is powered by a single external stylesheet
+        (<code>css/style.css</code>), the navigation menu is laid out horizontally using
+        <code>float</code>, and the content and images are arranged with
+        <code>float</code> and <code>clear</code>.</p>
+        <p>Use the menu above to look at my hobbies, my personal skills, an image
+        gallery and the ways you can contact me.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>About Me</h2>
+    <p>I am a computing student who likes learning new web technologies, solving
+    programming problems and building small projects in my free time. My goal is to
+    become a full-stack web developer one day.</p>
+
+    <table>
+      <tr><th>Field</th><th>Detail</th></tr>
+      <tr><td>Full Name</td><td>Aryan Zia</td></tr>
+      <tr><td>Registration No.</td><td>505899</td></tr>
+      <tr><td>Section</td><td>A</td></tr>
+      <tr><td>Program</td><td>BE Software Engineering</td></tr>
+      <tr><td>University</td><td>SEECS, NUST</td></tr>
+      <tr><td>Semester</td><td>Fall 2026</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Explore My Portfolio</h2>
+    <p>You can click any of the buttons below, or just use the navigation menu at the top:</p>
+    <a class="btn" href="hobbies.html">My Hobbies</a>
+    <a class="btn" href="skills.html">My Skills</a>
+    <a class="btn" href="gallery.html">Image Gallery</a>
+    <a class="btn" href="contact.html">Contact Me</a>
+  </div>
+
+</main>
+
+<footer>
+  <p>&copy; 2026 Aryan Zia &mdash; CS344 Web Engineering, Lab 3</p>
+</footer>
+
+</body>
+</html>
